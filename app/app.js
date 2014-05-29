@@ -22,20 +22,40 @@ var Producto = function(data) {
 };
 var App = function() {
   var self = this;
+  localforage.setDriver('localStorageWrapper');
   self.lista = ko.observableArray();
-  self.editando = ko.observable();
+  self.lista.subscribe(function(newVal) {
+    localforage.ready(function() {
+      var toSave = ko.utils.arrayMap(self.lista() || [], function(producto) {
+        return ko.toJS(producto);
+      });
+      
+      localforage.setItem('lista', toSave);
+    });
+  });
+  self.loadPreviousData = function() {
+    localforage.ready(function() {
+      localforage.getItem('lista', function(data) {
+        ko.utils.arrayForEach(data || [], function(producto) {
+          self.lista.unshift(new Producto(producto));
+        });
+      });
+    });
+  };
+  self.editando = ko.observable(null);
   self.nuevo = new Producto({});
   self.agregarNuevo = function() {
-    if (!self.nuevo.valid()) return;
+    if (!self.nuevo.valid()) {
+      alert('Llene todos los datos');
+      return;
+    }
     self.lista.unshift(self.nuevo.clone());
     self.nuevo.reset();
   };
-  self.nuevo.nombre('test');
-  self.nuevo.precio(10);
-  self.agregarNuevo();
   self.salvarCambios = function() {
     self.lista.remove(self.editando());
-    self.lista.push(self.editando().clone());
+    self.lista.unshift(self.editando().clone());
+    self.editando(null);
   };
   self.eliminar = function($data) {
     self.lista.remove($data);

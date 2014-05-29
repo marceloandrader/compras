@@ -47,7 +47,7 @@ if (env !== 'production') {
   sourceTrees.push(tests)
 }
 sourceTrees = sourceTrees.concat(findBowerTrees())
-
+//console.log(sourceTrees);
 var appAndDependencies = new mergeTrees(sourceTrees, { overwrite: true })
 
 var appJs = compileES6(appAndDependencies, {
@@ -59,7 +59,8 @@ var appJs = compileES6(appAndDependencies, {
     'appkit/**/*.js'
   ],
   legacyFilesToAppend: [
-    'knockout.js'
+    'knockout.js',
+    'localforage.min.js'
   ],
   wrapInEval: env !== 'production',
   outputFile: '/assets/app.js'
