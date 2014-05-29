@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Compras</title>
+  <script type="text/javascript" src="assets/app.js"></script>
+  <link href="assets/app.css" rel="stylesheet" type="text/css" media="all">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+  <a name="top"></a>
+  <!-- ko if: editando() == null -->
+  <form action="" role="form" class="form-inline" data-bind="with: nuevo, submit: agregarNuevo">
+    <label for="nombre">Nombre</label>
+    <input type="text" class="form-control" placeholder="nombre" id="nombre" data-bind="value: nombre" tabindex="1">
+    <label for="precio">Precio</label>
+    <input type="number" step="0.01" class="form-control" style="text-align: right;" placeholder="precio" id="precio" data-bind="value: precio" tabindex="2">
+    <label for="cantidad">Cantidad</label>
+    <input type="number" class="form-control"  style="text-align: right;" placeholder="cantidad" id="cantidad" value="1" data-bind="value: cantidad" tabindex="3">
+    <input type="submit" class="btn btn-primary" value="Crear">
+  </form>
+  <!-- /ko -->
+  <!-- ko if: editando() != null -->
+  <form action="" role="form" class="form-inline" data-bind="with: editando, submit: salvarCambios">
+    <label for="nombre">Nombre</label>
+    <input type="text" class="form-control" placeholder="nombre" id="nombre" data-bind="value: nombre">
+    <label for="precio">Precio</label>
+    <input type="number" step="0.01" class="form-control" style="text-align: right;" placeholder="precio" id="precio" data-bind="value: precio">
+    <label for="cantidad">Cantidad</label>
+    <input type="number" class="form-control"  style="text-align: right;" placeholder="cantidad" id="cantidad" value="1" data-bind="value: cantidad">
+    <input type="submit" class="btn btn-primary" value="Guardar">
+  </form>
+  <!-- /ko -->
+  <table class="table">
+    <thead>
+      <tr>
+        <td><a data-bind="click: ordenarPorNombre">Nombre</a></td>
+        <td><a data-bind="click: ordenarPorPrecio">Precio</a></td>
+        <td><a data-bind="click: ordenarPorPrecio">Total</a></td>
+        <td><a data-bind="click: ordenarPorComprado">Comprado</a></td>
+      </tr>
+    </thead>
+    <tbody data-bind="foreach: lista">
+      <tr data-bind="css:{'comprado': comprado}">
+        <td>
+          <button data-bind="click: $parent.eliminar" class="btn btn-danger">-</button>
+          <span data-bind="text: cantidad"></span> X 
+          <a data-bind="text: nombre, click: $parent.editar"></a>
+        </td>
+        <td>
+          <small data-bind="text: precio"></small>
+        </td>
+        <td>
+          <span  data-bind="text: total"></span>
+        </td>
+        <td>
+          <input type="checkbox" data-bind="checked: comprado">
+        </td>
+      </tr>
+    </tbody>
+    <tfoot style="font-weight: bold;">
+      <tr>
+        <td colspan=3>Total En Carrito</td>
+        <td><span data-bind="text: totalCarrito"></span> USD</td>
+      </tr>
+      <tr>
+        <td colspan=3>Total En Lista</td>
+        <td><span data-bind="text: totalLista"></span> USD</td>
+      </tr>
+    </tfoot>
+  </table>
+  <script type="text/javascript">
+    var App = require('appkit/app').default;
+    app = new App();
+    ko.applyBindings(app);
+  </script>
+</body>
+</html>

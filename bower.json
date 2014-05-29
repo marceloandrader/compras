@@ -1,0 +1,7 @@
+{
+  "name": "broccoli-sample-app",
+  "dependencies": {
+    "bootstrap-sass-official": "~3.1.1+2",
+    "knockout": "~3.1.0"
+  }
+}
