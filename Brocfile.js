@@ -6,6 +6,7 @@ var compileSass = require('broccoli-sass')
 var pickFiles = require('broccoli-static-compiler')
 var mergeTrees = require('broccoli-merge-trees')
 var findBowerTrees = require('broccoli-bower')
+var uncss = require('broccoli-uncss');
 var env = require('broccoli-env').getEnv()
 
 function preprocess (tree) {
@@ -72,7 +73,10 @@ if (env === 'production') {
   appJs = uglifyJavaScript(appJs, {
     // mangle: false,
     // compress: false
-  })
+  });
+  appCss = uncss(appCss, {
+    html: ['http://localhost:4200/index.html']
+  });
 }
 
 var publicFiles = 'public'
