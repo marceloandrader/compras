@@ -1,5 +1,8 @@
 @import "bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 
 .comprado {
-	text-decoration: line-through;
+	background-color: #eee;
+	a.nombre {
+		text-decoration: line-through;
+	}
 }

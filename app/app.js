@@ -95,6 +95,18 @@ var App = function() {
     });
     self.precioAsc = !self.precioAsc;
   };
+  self.totalAsc = true;
+  self.ordenarPorTotal = function() {
+    self.lista.sort(function(a,b) {
+      if (  self.totalAsc  ) {
+        return a.total() == b.total() ? 0 : (a.total() < b.total());
+      }
+      else {
+        return a.total() == b.total() ? 0 : (a.total() > b.total());
+      }
+    });
+    self.totalAsc = !self.totalAsc;
+  };
   self.nombreAsc = true;
   self.ordenarPorNombre = function() {
     self.lista.sort(function(a,b) {
