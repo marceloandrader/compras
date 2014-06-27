@@ -25,7 +25,11 @@ var App = function() {
   localforage.setDriver('localStorageWrapper');
   self.displayForm = ko.observable(false);
   self.showForm = function() {
+    self.editando(null);
     self.displayForm(true);
+  };
+  self.closeForm = function() {
+    self.displayForm(false);
   };
   self.lista = ko.observableArray();
   self.lista.subscribe(function(newVal) {
@@ -53,13 +57,13 @@ var App = function() {
       alert('Llene todos los datos');
       return;
     }
-    self.lista.unshift(self.nuevo.clone());
+    self.lista.push(self.nuevo.clone());
     self.nuevo.reset();
     self.displayForm(false);
   };
   self.salvarCambios = function() {
-    self.lista.remove(self.editando());
-    self.lista.unshift(self.editando().clone());
+    var indexOf = self.lista.indexOf(self.editando());
+    self.lista.splice(indexOf, 1, self.editando().clone());
     self.editando(null);
     self.displayForm(false);
   };
