@@ -4,10 +4,17 @@
   <title>Compras</title>
   <script type="text/javascript" src="assets/app.js"></script>
   <link href="assets/app.css" rel="stylesheet" type="text/css" media="all">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="btn btn-primary navbar-btn" data-bind="click: showForm">Agregar</button>
+      <button type="button" class="btn btn-default navbar-btn pull-right">Carrito: <span data-bind="text: totalCarrito"></span> de <span data-bind="text: totalLista"></span> USD</button>
+    </div>
+  </nav>
   <div class="container">
+  <div id="product-form" data-bind="visible: displayForm">
   <!-- ko if: editando() == null -->
   <form action="" role="form" class="form-inline" data-bind="with: nuevo, submit: agregarNuevo">
   <div class="row">
@@ -30,7 +37,7 @@
       <input type="number" class="form-control" placeholder="cantidad" id="cantidad" value="1" data-bind="value: cantidad" tabindex="3" autocomplete="off">
     </div>
     <div class="col-xs-offset-2 col-xs-10">
-      <label for="comprado">
+      <label for="comprado" class="btn">
         <input type="checkbox" class="form-control" id="comprado" data-bind="checked: comprado" tabindex="4" autocomplete="off">
         Comprado
       </label>
@@ -65,7 +72,7 @@
       <input type="number" class="form-control" placeholder="cantidad" id="cantidad" value="1" data-bind="value: cantidad" tabindex="3" autocomplete="off">
     </div>
     <div class="col-xs-offset-2 col-xs-10">
-      <label for="comprado">
+      <label for="comprado" class="btn">
         <input type="checkbox" class="form-control" id="comprado" data-bind="checked: comprado" tabindex="4" autocomplete="off">
         Comprado
       </label>
@@ -78,6 +85,7 @@
   </div>
   </form>
   <!-- /ko -->
+  </div>
   <table class="table table-condensed">
     <thead>
       <tr>
@@ -104,20 +112,12 @@
           <span  data-bind="text: total"></span>
         </td>
         <td>
-          <input type="checkbox" data-bind="checked: comprado">
+          <label class="btn btn-default">
+            <input type="checkbox" data-bind="checked: comprado">
+          </label>
         </td>
       </tr>
     </tbody>
-    <tfoot style="font-weight: bold;">
-      <tr>
-        <td colspan=3>Total En Carrito</td>
-        <td><span data-bind="text: totalCarrito"></span> USD</td>
-      </tr>
-      <tr>
-        <td colspan=3>Total En Lista</td>
-        <td><span data-bind="text: totalLista"></span> USD</td>
-      </tr>
-    </tfoot>
   </table>
   <div class="row">
     <div class="col-xs-12">

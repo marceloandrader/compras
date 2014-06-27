@@ -23,6 +23,10 @@ var Producto = function(data) {
 var App = function() {
   var self = this;
   localforage.setDriver('localStorageWrapper');
+  self.displayForm = ko.observable(false);
+  self.showForm = function() {
+    self.displayForm(true);
+  };
   self.lista = ko.observableArray();
   self.lista.subscribe(function(newVal) {
     localforage.ready(function() {
@@ -51,17 +55,20 @@ var App = function() {
     }
     self.lista.unshift(self.nuevo.clone());
     self.nuevo.reset();
+    self.displayForm(false);
   };
   self.salvarCambios = function() {
     self.lista.remove(self.editando());
     self.lista.unshift(self.editando().clone());
     self.editando(null);
+    self.displayForm(false);
   };
   self.eliminar = function($data) {
     self.lista.remove($data);
   };
   self.editar = function($data) {
     self.editando($data);
+    self.displayForm(true);
   };
   self.totalCarrito = ko.computed(function() {
     var total = 0;
@@ -71,17 +78,14 @@ var App = function() {
         total += producto.total();
       }
     });
-    return total;
+    return total.toFixed(2);
   });
   self.totalLista = ko.computed(function() {
     var total = 0;
     ko.utils.arrayForEach(self.lista() || [], function(producto) {
-      if (!producto.comprado())
-      {
-        total += producto.total();
-      }
+      total += producto.total();
     });
-    return total;
+    return total.toFixed(2);
   });
   self.precioAsc = true;
   self.ordenarPorPrecio = function() {
