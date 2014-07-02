@@ -88,7 +88,14 @@ var App = function() {
   };
   self.limpiarLista = function() {
     if (window.confirm('Seguro?')) {
-      self.lista([]);
+      localforage.ready(function() {
+        var toSave = ko.utils.arrayMap(self.lista() || [], function(producto) {
+          return ko.toJS(producto);
+        });
+
+        localforage.setItem('old-lista-'+(new Date().toISOString()), toSave);
+        self.lista([]);
+      });
     }
   };
   self.totalCarrito = ko.computed(function() {
