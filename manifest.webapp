@@ -1,0 +1,24 @@
+{
+  "version": "1",
+  "name": "Compras",
+  "launch_path": "/Compras/index.html",
+  "description": "App para registrar compras en supermercados, útil para no sobrepasar presupuestos",
+  "icons": {
+    "128": "/Compras/images/logo128.png"
+  },
+  "developer": {
+    "name": "Marcelo Andrade",
+    "url": "https://marceloandrader.github.io/"
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "default_locale": "es",
+  "permissions": {},
+  "locales": {
+    "es": {
+      "name": "Compras",
+      "description": "App para registrar compras en supermercados, útil para no sobrepasar presupuestos"
+    }
+  }
+}
