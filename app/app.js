@@ -1,11 +1,14 @@
 var Producto = function(data) {
   var self = this;
   self.nombre = ko.observable(data.nombre || '');
-  self.cantidad = ko.observable(data.cantidad || 1);
+  self.cantidad = ko.observable(data.cantidad || '1');
   self.precio = ko.observable(data.precio || '');
   self.comprado = ko.observable(data.comprado || false);
   self.total = ko.computed(function () {
     return self.precio() * self.cantidad();
+  });
+  self.precioFormateado = ko.computed(function() {
+    return parseFloat(self.precio()).toFixed(2);
   });
   self.clone = function() {
     var newOne = new Producto(ko.toJS(self));
@@ -15,6 +18,13 @@ var Producto = function(data) {
     self.nombre('');
     self.precio('');
     self.cantidad(1);
+  };
+  self.incrCantidad = function () {
+    self.cantidad(parseInt(self.cantidad(),10)+1);
+  };
+  self.decrCantidad = function () {
+    if (self.cantidad() < 2) return;
+    self.cantidad(parseInt(self.cantidad(),10)-1);
   };
   self.valid = function() {
     return self.nombre() != '' && self.precio() != '';
@@ -68,11 +78,18 @@ var App = function() {
     self.displayForm(false);
   };
   self.eliminar = function($data) {
-    self.lista.remove($data);
+    if (window.confirm('Seguro?')) {
+      self.lista.remove($data);
+    }
   };
   self.editar = function($data) {
     self.editando($data);
     self.displayForm(true);
+  };
+  self.limpiarLista = function() {
+    if (window.confirm('Seguro?')) {
+      self.lista([]);
+    }
   };
   self.totalCarrito = ko.computed(function() {
     var total = 0;
