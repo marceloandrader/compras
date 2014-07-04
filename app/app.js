@@ -222,6 +222,7 @@ var App = function() {
       self.nuevo.comprado(i % 2 == 0);
       self.lista.push(self.nuevo.clone());
     }
+    self.filter('49');
   };
   if (document.location.port == 4200) {
     // testing env
