@@ -34,9 +34,22 @@ var App = function() {
   var self = this;
   localforage.setDriver('localStorageWrapper');
   self.displayForm = ko.observable(false);
-  self.showForm = function() {
-    self.editando(null);
-    self.displayForm(true);
+  self.displayForm.subscribe(function(val) {
+    if (val) {
+      self.searchForm(false);
+    }
+  });
+  self.toggleForm = function() {
+    self.displayForm(!self.displayForm());
+    if (self.displayForm()) {
+      // Agregando
+      self.editRecord.reset();
+      self.edit(self.editRecord);
+      self.nuevo.reset();
+      var nombreElement = document.getElementById('nombre1');
+      nombreElement.focus();
+      nombreElement.select();
+    }
   };
   self.closeForm = function() {
     self.displayForm(false);
@@ -52,10 +65,17 @@ var App = function() {
     });
   });
   self.searchForm = ko.observable(false);
-  self.filter = ko.observable('').extend({ rateLimit: 300 });;
+  self.searchForm.subscribe(function(val){
+    if (val) {
+      self.displayForm(false);
+    }
+  });
+  self.filter = ko.observable('').extend({ rateLimit: { timeout: 100, method: "notifyWhenChangesStop" } });;
   self.filteredLista = ko.computed(function() {
+    var regexp = new RegExp(self.filter(), 'gi');
     return self.lista().filter(function(item) {
-      return self.filter() == '' || item.nombre().match(self.filter());
+
+      return self.filter() == '' || item.nombre().match(regexp);
     });
   });
   self.toggleSearchForm = function() {
@@ -78,7 +98,12 @@ var App = function() {
       });
     });
   };
-  self.editando = ko.observable(null);
+  self.editando = ko.observable(false);
+  self.editRecord = new Producto({});
+  self.edit = ko.observable(self.editRecord);
+  self.edit.subscribe(function(val) {
+    self.editando(val.nombre() != '');
+  });
   self.nuevo = new Producto({});
   self.agregarNuevo = function() {
     if (!self.nuevo.valid()) {
@@ -90,9 +115,13 @@ var App = function() {
     self.displayForm(false);
   };
   self.salvarCambios = function() {
-    var indexOf = self.lista.indexOf(self.editando());
-    self.lista.splice(indexOf, 1, self.editando().clone());
-    self.editando(null);
+    if (!self.edit().valid()) {
+      alert('Llene todos los datos');
+      return;
+    }
+    var indexOf = self.lista.indexOf(self.edit());
+    self.lista.splice(indexOf, 1, self.edit().clone());
+    self.edit(self.editRecord);
     self.displayForm(false);
   };
   self.eliminar = function($data) {
@@ -101,8 +130,11 @@ var App = function() {
     }
   };
   self.editar = function($data) {
-    self.editando($data);
     self.displayForm(true);
+    self.edit($data);
+    var precioElement = document.getElementById('precio');
+    precioElement.focus();
+    precioElement.select();
   };
   self.limpiarLista = function() {
     if (window.confirm('Seguro?')) {
