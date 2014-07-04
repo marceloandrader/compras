@@ -51,6 +51,24 @@ var App = function() {
       localforage.setItem('lista', toSave);
     });
   });
+  self.searchForm = ko.observable(false);
+  self.filter = ko.observable('').extend({ rateLimit: 300 });;
+  self.filteredLista = ko.computed(function() {
+    return self.lista().filter(function(item) {
+      return self.filter() == '' || item.nombre().match(self.filter());
+    });
+  });
+  self.toggleSearchForm = function() {
+    self.searchForm(!self.searchForm());
+    if (self.searchForm()) {
+      var termElement = document.getElementById('search-term');
+      termElement.focus();
+    }
+  };
+  self.resetFilter = function() {
+    self.filter('');
+    self.toggleSearchForm();
+  };
   self.loadPreviousData = function() {
     localforage.ready(function() {
       localforage.getItem('lista', function(data) {
@@ -163,5 +181,19 @@ var App = function() {
     });
     self.compradoAsc = !self.compradoAsc;
   };
+  self.cargarDatosPrueba = function() {
+    self.lista([]);
+    for (var i=0; i< 50; i++) {
+      self.nuevo.nombre('Nombre ' + i);
+      self.nuevo.precio(i % 2 == 0 ? 2.5 : 0.99);
+      self.nuevo.cantidad(1);
+      self.nuevo.comprado(i % 2 == 0);
+      self.lista.push(self.nuevo.clone());
+    }
+  };
+  if (document.location.port == 4200) {
+    // testing env
+    self.cargarDatosPrueba();
+  }
 };
 export default App;

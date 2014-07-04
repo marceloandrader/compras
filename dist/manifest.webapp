@@ -1,10 +1,10 @@
 {
   "version": "1",
   "name": "Compras",
-  "launch_path": "/compras/index.html",
+  "launch_path": "/index.html",
   "description": "App para registrar compras en supermercados, útil para no sobrepasar presupuestos",
   "icons": {
-    "128": "/compras/images/logo128.png"
+    "128": "/images/logo128.png"
   },
   "developer": {
     "name": "Marcelo Andrade",

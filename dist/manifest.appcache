@@ -1,0 +1,12 @@
+CACHE MANIFEST
+# created 2014-07-04T16:32:23.109Z
+
+CACHE:
+assets/app.css
+assets/app.js
+images/logo128.png
+index.html
+manifest.webapp
+
+NETWORK:
+*

@@ -8,6 +8,8 @@ var mergeTrees = require('broccoli-merge-trees')
 var findBowerTrees = require('broccoli-bower')
 var uncss = require('broccoli-uncss');
 var env = require('broccoli-env').getEnv()
+var writeManifest = require('broccoli-manifest');
+var csso = require('broccoli-csso');
 
 function preprocess (tree) {
   tree = filterTemplates(tree, {
@@ -74,11 +76,17 @@ if (env === 'production') {
     // mangle: false,
     // compress: false
   });
-  appCss = uncss(appCss, {
+  appCss = csso(uncss(appCss, {
     html: ['http://localhost:4200/index.html']
-  });
+  }));
 }
 
 var publicFiles = 'public'
 
-module.exports = mergeTrees([appJs, appCss, publicFiles])
+if (env === 'production') {
+  var completeTree = mergeTrees([appJs, appCss, publicFiles]);
+  module.exports = mergeTrees([completeTree, writeManifest(completeTree)])
+}
+else {
+  module.exports = mergeTrees([appJs, appCss, publicFiles])
+}
