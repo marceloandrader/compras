@@ -1,4 +1,5 @@
 var Producto = function(data) {
+  'use strict';
   var self = this;
   self.nombre = ko.observable(data.nombre || '');
   self.cantidad = ko.observable(data.cantidad || '1');
@@ -31,6 +32,7 @@ var Producto = function(data) {
   };
 };
 var App = function() {
+  'use strict';
   var self = this;
   localforage.setDriver('localStorageWrapper');
   self.displayForm = ko.observable(false);
@@ -160,7 +162,7 @@ var App = function() {
       dataType: 'json',
       data: JSON.stringify({
         'files': {
-          'data.json': { "content": JSON.stringify(toExport) }
+          'data.json': { 'content': JSON.stringify(toExport) }
         },
         'public': true,
         'description': 'Export from http://marceloandrader.github.io/compras/',
@@ -168,6 +170,7 @@ var App = function() {
       }).
       success( function( response ) {
         self.exportedId(response.id);
+        alert('Lista exportada copie al final el código');
       }).
       error( function( response ) {
         alert('there was a problem sending your data');
@@ -179,7 +182,7 @@ var App = function() {
     self.importing(true);
   };
   self.importList = function() {
-    if (self.importId() == '') {
+    if ($.trim(self.importId()) === '') {
       alert('Ingrese un ID');
       return;
     }
@@ -195,7 +198,7 @@ var App = function() {
         self.filter('');
 
         $.ajax({
-          url: 'https://api.github.com/gists/'+self.importId(),
+          url: 'https://api.github.com/gists/'+$.trim(self.importId()),
           type: 'GET',
           dataType: 'json',
         }).
@@ -204,6 +207,7 @@ var App = function() {
           ko.utils.arrayForEach(JSON.parse(contents)|| [], function(producto) {
             self.lista.unshift(new Producto(producto));
           });
+          alert('Lista importada correctamente');
         }).
         error( function( response ) {
           alert('there was a problem getting your data');
