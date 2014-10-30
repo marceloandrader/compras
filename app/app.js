@@ -148,6 +148,70 @@ var App = function() {
       });
     }
   };
+  self.exportedId = ko.observable(null);
+  self.exportarLista = function() {
+    var toExport = ko.utils.arrayMap(self.lista() || [], function(producto) {
+      return ko.toJS(producto);
+    });
+    $.ajax(
+      {
+      url: 'https://api.github.com/gists',
+      type: 'POST',
+      dataType: 'json',
+      data: JSON.stringify({
+        'files': {
+          'data.json': { "content": JSON.stringify(toExport) }
+        },
+        'public': true,
+        'description': 'Export from http://marceloandrader.github.io/compras/',
+      })
+      }).
+      success( function( response ) {
+        self.exportedId(response.id);
+      }).
+      error( function( response ) {
+        alert('there was a problem sending your data');
+      });
+  };
+  self.importId = ko.observable(null);
+  self.importing = ko.observable(false);
+  self.importarLista = function() {
+    self.importing(true);
+  };
+  self.importList = function() {
+    if (self.importId() == '') {
+      alert('Ingrese un ID');
+      return;
+    }
+    if (confirm('Seguro de eliminar la lista actual para importar la nueva?'))
+    {
+      localforage.ready(function() {
+        var toSave = ko.utils.arrayMap(self.lista() || [], function(producto) {
+          return ko.toJS(producto);
+        });
+
+        localforage.setItem('old-lista-'+(new Date().toISOString()), toSave);
+        self.lista([]);
+        self.filter('');
+
+        $.ajax({
+          url: 'https://api.github.com/gists/'+self.importId(),
+          type: 'GET',
+          dataType: 'json',
+        }).
+        success( function( response ) {
+          var contents = response.files['data.json'].content;
+          ko.utils.arrayForEach(JSON.parse(contents)|| [], function(producto) {
+            self.lista.unshift(new Producto(producto));
+          });
+        }).
+        error( function( response ) {
+          alert('there was a problem getting your data');
+        });
+      });
+    }
+
+  };
   self.totalCarrito = ko.computed(function() {
     var total = 0;
     ko.utils.arrayForEach(self.lista() || [], function(producto) {

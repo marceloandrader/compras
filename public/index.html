@@ -165,7 +165,22 @@
     </div>
     <div class="row" data-bind="visible: lista().length != 0">
       <div class="col-xs-12">
-        <a data-bind="click: limpiarLista">Limpiar lista</a>
+        <a data-bind="click: limpiarLista">Limpiar lista</a> | 
+        <a data-bind="click: exportarLista">Exportar lista</a> |
+        <a data-bind="click: importarLista">Importar lista</a>
+      </div>
+    </div>
+    <div class="row" data-bind="visible: exportedId() != null">
+      <div class="col-xs-12">
+        <p>Use el siguiente ID para importar su lista en otro dispositivo</p>
+        <code data-bind="text: exportedId()"></code>
+      </div>
+    </div>
+    <div class="row" data-bind="visible: importing()">
+      <div class="col-xs-12">
+        <p>Ingrese el ID para importar su lista</p>
+        <input type="text" data-bind="value: importId"/>
+        <button class="btn btn-default" data-bind="click: importList">Importar</button>
       </div>
     </div>
   </div>

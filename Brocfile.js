@@ -63,7 +63,8 @@ var appJs = compileES6(appAndDependencies, {
   ],
   legacyFilesToAppend: [
     'knockout.js',
-    'localforage.min.js'
+    'localforage.min.js',
+    'jquery.js'
   ],
   wrapInEval: env !== 'production',
   outputFile: '/assets/app.js'
