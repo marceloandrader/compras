@@ -207,6 +207,8 @@ var App = function() {
           ko.utils.arrayForEach(JSON.parse(contents)|| [], function(producto) {
             self.lista.unshift(new Producto(producto));
           });
+          self.importId(null);
+          self.importing(false);
           alert('Lista importada correctamente');
         }).
         error( function( response ) {
