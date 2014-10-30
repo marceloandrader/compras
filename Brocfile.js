@@ -77,9 +77,7 @@ if (env === 'production') {
     // mangle: false,
     // compress: false
   });
-  appCss = csso(uncss(appCss, {
-    html: ['http://localhost:4200/index.html']
-  }));
+  appCss = csso(appCss);
 }
 
 var publicFiles = 'public'
