@@ -163,10 +163,10 @@
         <p>Empieza creando productos para agregar al carrito</p>
       </div>
     </div>
-    <div class="row" data-bind="visible: lista().length != 0">
+    <div class="row" data-bind="">
       <div class="col-xs-12">
-        <a data-bind="click: limpiarLista">Limpiar lista</a> | 
-        <a data-bind="click: exportarLista">Exportar lista</a> |
+        <a data-bind="click: limpiarLista, visible: lista().length != 0">Limpiar lista |</a>
+        <a data-bind="click: exportarLista, visible: lista().length != 0">Exportar lista |</a>
         <a data-bind="click: importarLista">Importar lista</a>
       </div>
     </div>
